@@ -3,9 +3,9 @@
 module VectorBuilder.Vector
 where
 
-import VectorBuilder.Prelude
+import VectorBuilder.Private.Prelude
 import Data.Vector
-import qualified VectorBuilder.Builder as A
+import qualified VectorBuilder.Private.Builder as A
 import qualified VectorBuilder.MVector as B
 
 

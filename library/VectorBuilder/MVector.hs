@@ -3,10 +3,10 @@
 module VectorBuilder.MVector
 where
 
-import VectorBuilder.Prelude
+import VectorBuilder.Private.Prelude
 import Data.Vector.Mutable
-import qualified VectorBuilder.Builder as A
-import qualified VectorBuilder.Action as B
+import qualified VectorBuilder.Private.Builder as A
+import qualified VectorBuilder.Private.Action as B
 
 
 {-# INLINABLE build #-}
