@@ -3,6 +3,7 @@ where
 
 import VectorUpdate.Prelude
 import qualified Data.Vector.Mutable as A
+import qualified Data.Vector as B
 
 
 newtype Action s element result =
@@ -34,3 +35,11 @@ snoc :: element -> Action s element ()
 snoc element =
   Action (\size -> (\mVector -> A.unsafeWrite mVector size element, succ size))
 
+append :: B.Vector element -> Action s element ()
+append appendedVector =
+  Action ((,) <$> vectorFn <*> size)
+  where
+    vectorFn currentSize mVector =
+      B.ifoldM' (\_ index element -> A.unsafeWrite mVector (currentSize + index) element) () appendedVector
+    size currentSize =
+      B.length appendedVector + currentSize

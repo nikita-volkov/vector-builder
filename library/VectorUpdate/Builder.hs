@@ -3,10 +3,17 @@ where
 
 import VectorUpdate.Prelude
 import qualified VectorUpdate.Action as A
+import qualified Data.Vector as B
 
 
 newtype Builder element =
   Builder (forall s. A.Action s element ())
+
+instance Monoid (Builder element) where
+  mempty =
+    VectorUpdate.Builder.empty
+  mappend =
+    prepend
 
 
 -- * Initialisation
@@ -18,6 +25,10 @@ empty =
 singleton :: element -> Builder element
 singleton element =
   Builder (A.snoc element)
+
+vector :: B.Vector element -> Builder element
+vector vector =
+  Builder (A.append vector)
 
 
 -- * Updates
