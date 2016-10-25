@@ -9,6 +9,8 @@ import qualified VectorBuilder.Private.Builder as A
 import qualified VectorBuilder.Private.Action as B
 
 
+-- |
+-- Construct a mutable vector from a builder.
 {-# INLINABLE build #-}
 build :: A.Builder element -> ST s (MVector s element)
 build (A.Builder (B.Action actionFn)) =

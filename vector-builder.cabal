@@ -3,7 +3,9 @@ name:
 version:
   0.1
 synopsis:
-  Transactions on vectors
+  Vector builder
+description:
+  An API for efficient construction of vectors with abstraction over their size.
 category:
   Vector
 homepage:
