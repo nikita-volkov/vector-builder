@@ -1,12 +1,12 @@
 -- |
 -- Extensions to the standard mutable Vector API.
-module VectorUpdate.MVector
+module VectorBuilder.MVector
 where
 
-import VectorUpdate.Prelude
+import VectorBuilder.Prelude
 import Data.Vector.Mutable
-import qualified VectorUpdate.Builder as A
-import qualified VectorUpdate.Action as B
+import qualified VectorBuilder.Builder as A
+import qualified VectorBuilder.Action as B
 
 
 {-# INLINABLE build #-}

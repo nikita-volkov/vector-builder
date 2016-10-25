@@ -1,8 +1,8 @@
-module VectorUpdate.Builder
+module VectorBuilder.Builder
 where
 
-import VectorUpdate.Prelude
-import qualified VectorUpdate.Action as A
+import VectorBuilder.Prelude
+import qualified VectorBuilder.Action as A
 import qualified Data.Vector as B
 
 
@@ -11,7 +11,7 @@ newtype Builder element =
 
 instance Monoid (Builder element) where
   mempty =
-    VectorUpdate.Builder.empty
+    VectorBuilder.Builder.empty
   mappend =
     prepend
 

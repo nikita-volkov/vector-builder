@@ -1,7 +1,7 @@
-module VectorUpdate.Action
+module VectorBuilder.Action
 where
 
-import VectorUpdate.Prelude
+import VectorBuilder.Prelude
 import qualified Data.Vector.Mutable as A
 import qualified Data.Vector as B
 

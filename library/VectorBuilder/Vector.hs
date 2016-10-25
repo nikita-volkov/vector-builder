@@ -1,12 +1,12 @@
 -- |
 -- Extensions to the standard immutable Vector API.
-module VectorUpdate.Vector
+module VectorBuilder.Vector
 where
 
-import VectorUpdate.Prelude
+import VectorBuilder.Prelude
 import Data.Vector
-import qualified VectorUpdate.Builder as A
-import qualified VectorUpdate.MVector as B
+import qualified VectorBuilder.Builder as A
+import qualified VectorBuilder.MVector as B
 
 
 {-# INLINE build #-}
