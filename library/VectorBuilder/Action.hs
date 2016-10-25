@@ -20,15 +20,14 @@ instance Applicative (Action s element) where
   pure result =
     Action (\size -> (const (pure result), size))
   (<*>) (Action actionFn1) (Action actionFn2) =
-    Action (\size -> combineActionResults size (actionFn1 size) (actionFn2 size))
+    Action actionFn
     where
-      combineActionResults size (vectorFn1, size1) (vectorFn2, size2) =
-        (vectorFn3, size3)
-        where
-          vectorFn3 =
-            (<*>) <$> vectorFn1 <*> vectorFn2
-          size3 =
-            size1 + size2 - size
+      actionFn size =
+        case actionFn1 size of
+          (vectorFn1, size1) ->
+            case actionFn2 size1 of
+              (vectorFn2, size2) ->
+                ((<*>) <$> vectorFn1 <*> vectorFn2, size2)
 
 
 snoc :: element -> Action s element ()
