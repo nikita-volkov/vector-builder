@@ -2,22 +2,35 @@ module VectorUpdate.Action
 where
 
 import VectorUpdate.Prelude
-import qualified VectorUpdate.ActionFn as A
+import qualified Data.Vector.Mutable as A
 
 
 newtype Action s element result =
-  Action (A.ActionFn s element result)
-  deriving (Functor)
+  Action (Int -> (A.MVector s element -> ST s result, Int))
+
+instance Functor (Action s element) where
+  fmap fn (Action actionFn) =
+    Action $ \size ->
+    case actionFn size of
+      (updateFn, newSize) ->
+        (fmap fn . updateFn, newSize)
 
 instance Applicative (Action s element) where
-  pure =
-    Action . A.point
+  pure result =
+    Action (\size -> (const (pure result), size))
   (<*>) (Action actionFn1) (Action actionFn2) =
-    Action (A.ap actionFn1 actionFn2)
+    Action (\size -> combineActionResults size (actionFn1 size) (actionFn2 size))
+    where
+      combineActionResults size (vectorFn1, size1) (vectorFn2, size2) =
+        (vectorFn3, size3)
+        where
+          vectorFn3 =
+            (<*>) <$> vectorFn1 <*> vectorFn2
+          size3 =
+            size1 + size2 - size
 
-instance Monad (Action s element) where
 
 snoc :: element -> Action s element ()
 snoc element =
-  Action (A.snoc element)
+  Action (\size -> (\mVector -> A.unsafeWrite mVector size element, succ size))
 

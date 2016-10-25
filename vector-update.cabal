@@ -42,11 +42,11 @@ library
     Haskell2010
   other-modules:
     VectorUpdate.Prelude
-    VectorUpdate.ActionFn
     VectorUpdate.Action
   exposed-modules:
     VectorUpdate.Builder
     VectorUpdate.MVector
+    VectorUpdate.Vector
   build-depends:
     vector == 0.11.*,
     base-prelude < 2
