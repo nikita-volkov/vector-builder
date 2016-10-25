@@ -4,4 +4,5 @@ module VectorBuilder.Private.Prelude
 )
 where
 
-import BasePrelude as Exports
+import BasePrelude as Exports hiding ((<>))
+import Data.Semigroup as Exports (Semigroup(..))

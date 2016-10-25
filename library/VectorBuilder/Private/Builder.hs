@@ -15,6 +15,10 @@ instance Monoid (Builder element) where
   mappend =
     prepend
 
+instance Semigroup (Builder element) where
+  (<>) =
+    prepend
+
 
 -- * Initialisation
 
