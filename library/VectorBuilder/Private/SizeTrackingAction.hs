@@ -29,9 +29,4 @@ snoc element =
 
 append :: B.Vector vector element => vector element -> SizeTrackingAction element ()
 append appendedVector =
-  SizeTrackingAction ((,) <$> action <*> size)
-  where
-    action currentSize =
-      C.unsafeWriteMany currentSize appendedVector
-    size currentSize =
-      B.length appendedVector + currentSize
+  SizeTrackingAction (\size -> (C.unsafeWriteMany size appendedVector, size + B.length appendedVector))
