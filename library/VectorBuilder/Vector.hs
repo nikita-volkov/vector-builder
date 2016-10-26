@@ -10,7 +10,9 @@ import qualified VectorBuilder.MVector as B
 
 
 -- |
--- Construct a vector from a builder.
+-- Construct an immutable vector from a builder.
+-- 
+-- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINE build #-}
 build :: Vector vector element => A.Builder element -> vector element
 build builder =

@@ -12,6 +12,8 @@ import qualified VectorBuilder.Private.Action as C
 
 -- |
 -- Construct a mutable vector from a builder.
+-- 
+-- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINABLE build #-}
 build :: MVector vector element => A.Builder element -> ST s (vector s element)
 build (A.Builder (B.SizeTrackingAction sizeTrackingActionFn)) =
