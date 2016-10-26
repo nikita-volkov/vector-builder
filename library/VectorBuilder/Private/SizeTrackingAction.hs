@@ -2,8 +2,7 @@ module VectorBuilder.Private.SizeTrackingAction
 where
 
 import VectorBuilder.Private.Prelude
-import qualified Data.Vector.Mutable as A
-import qualified Data.Vector as B
+import qualified Data.Vector.Generic as B
 import qualified VectorBuilder.Private.Action as C
 
 
@@ -28,7 +27,7 @@ snoc :: element -> SizeTrackingAction element ()
 snoc element =
   SizeTrackingAction (\size -> (C.unsafeWrite size element, succ size))
 
-append :: B.Vector element -> SizeTrackingAction element ()
+append :: B.Vector vector element => vector element -> SizeTrackingAction element ()
 append appendedVector =
   SizeTrackingAction ((,) <$> action <*> size)
   where

@@ -3,7 +3,7 @@ where
 
 import VectorBuilder.Private.Prelude
 import qualified VectorBuilder.Private.SizeTrackingAction as A
-import qualified Data.Vector as B
+import qualified Data.Vector.Generic as B
 
 
 -- |
@@ -43,8 +43,10 @@ singleton element =
   Builder (A.snoc element)
 
 -- |
--- Builder from a vector of elements.
-vector :: B.Vector element -> Builder element
+-- Builder from an immutable vector of elements.
+-- 
+-- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
+vector :: B.Vector vector element => vector element -> Builder element
 vector vector =
   Builder (A.append vector)
 
