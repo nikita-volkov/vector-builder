@@ -1,19 +1,30 @@
 # vector-builder
 
-An API for efficient construction of vectors with abstraction over their size.
+An API for efficient and convenient construction of vectors. It provides the composable `Builder` abstraction, which has instances of the `Monoid` and `Semigroup` classes. 
+
 
 ## Usage
 
-Vectors are built using the `Monoid` and `Semigroup` instances for `Builder`.
+First you use the `Builder` abstraction to specify the structure of the vector. Then you execute the builder to produce the output vector.
+
+## Example
+
+The following code shows how you can efficiently concatenate different datastructures into a single immutable vector:
 
 ```haskell
-import qualified VectorBuilder.Builder as Builder (singleton)
-import qualified VectorBuilder.Vector as Builder (build)
-import Data.Vector (Vector)
 
-list2vector :: [a] -> Vector a
-list2vector l = Builder.build builder
+import qualified Data.Vector as A
+import qualified VectorBuilder.Builder as B
+import qualified VectorBuilder.Vector as C
+
+
+myVector :: A.Vector a -> [a] -> a -> A.Vector a
+myVector vector list element =
+  C.build builder
   where
-    builder = foldMap Builder.singleton l
+    builder =
+      B.vector vector <>
+      foldMap B.singleton list <>
+      B.singleton element
 
 ```
