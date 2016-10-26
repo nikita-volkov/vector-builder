@@ -45,6 +45,7 @@ library
   other-modules:
     VectorBuilder.Private.Prelude
     VectorBuilder.Private.Action
+    VectorBuilder.Private.SizeTrackingAction
     VectorBuilder.Private.Builder
   exposed-modules:
     VectorBuilder.Builder

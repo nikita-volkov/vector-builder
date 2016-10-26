@@ -6,39 +6,20 @@ import qualified Data.Vector.Mutable as A
 import qualified Data.Vector as B
 
 
-newtype Action s element result =
-  Action (Int -> (A.MVector s element -> ST s result, Int))
+newtype Action element result =
+  Action (forall s. A.MVector s element -> ST s result)
+  deriving (Functor)
 
-instance Functor (Action s element) where
-  fmap fn (Action actionFn) =
-    Action $ \size ->
-    case actionFn size of
-      (updateFn, newSize) ->
-        (fmap fn . updateFn, newSize)
-
-instance Applicative (Action s element) where
+instance Applicative (Action element) where
   pure result =
-    Action (\size -> (const (pure result), size))
+    Action (const (pure result))
   (<*>) (Action actionFn1) (Action actionFn2) =
-    Action actionFn
-    where
-      actionFn size =
-        case actionFn1 size of
-          (vectorFn1, size1) ->
-            case actionFn2 size1 of
-              (vectorFn2, size2) ->
-                ((<*>) <$> vectorFn1 <*> vectorFn2, size2)
+    Action ((<*>) <$> actionFn1 <*> actionFn2)
 
+unsafeWrite :: Int -> element -> Action element ()
+unsafeWrite index element =
+  Action (\mVector -> A.unsafeWrite mVector index element)
 
-snoc :: element -> Action s element ()
-snoc element =
-  Action (\size -> (\mVector -> A.unsafeWrite mVector size element, succ size))
-
-append :: B.Vector element -> Action s element ()
-append appendedVector =
-  Action ((,) <$> vectorFn <*> size)
-  where
-    vectorFn currentSize mVector =
-      B.ifoldM' (\_ index element -> A.unsafeWrite mVector (currentSize + index) element) () appendedVector
-    size currentSize =
-      B.length appendedVector + currentSize
+unsafeWriteMany :: Int -> B.Vector element -> Action element ()
+unsafeWriteMany startingIndex appendedVector =
+  Action (\mVector -> B.ifoldM' (\_ index element -> A.unsafeWrite mVector (startingIndex + index) element) () appendedVector)

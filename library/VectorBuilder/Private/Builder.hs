@@ -2,7 +2,7 @@ module VectorBuilder.Private.Builder
 where
 
 import VectorBuilder.Private.Prelude
-import qualified VectorBuilder.Private.Action as A
+import qualified VectorBuilder.Private.SizeTrackingAction as A
 import qualified Data.Vector as B
 
 
@@ -11,7 +11,7 @@ import qualified Data.Vector as B
 -- 
 -- It postpones the actual construction of a vector until the execution of the builder.
 newtype Builder element =
-  Builder (forall s. A.Action s element ())
+  Builder (A.SizeTrackingAction element ())
 
 -- |
 -- Provides support for /O(1)/ concatenation.
