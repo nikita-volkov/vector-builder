@@ -1,7 +1,7 @@
 name:
   vector-builder
 version:
-  0.3
+  0.3.1
 synopsis:
   Vector builder
 description:
@@ -77,7 +77,7 @@ library
     VectorBuilder.MVector
     VectorBuilder.Vector
   build-depends:
-    vector == 0.11.*,
+    vector >= 0.11 && < 0.13,
     semigroups >= 0.16 && < 0.20,
     base-prelude < 2,
     base >= 4.6 && < 5
