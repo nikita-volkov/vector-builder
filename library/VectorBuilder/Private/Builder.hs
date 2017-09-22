@@ -1,34 +1,17 @@
 module VectorBuilder.Private.Builder
 where
 
-import VectorBuilder.Private.Prelude
-import qualified VectorBuilder.Private.UpdateWithOffset as A
+import VectorBuilder.Private.Prelude hiding (empty)
+import qualified VectorBuilder.Private.Update as A
 import qualified Data.Vector.Generic as B
 
 
 -- |
--- An abstraction over the size of a vector for the process of its construction.
+-- An abstrupdate over the size of a vector for the process of its construction.
 -- 
 -- It postpones the actual construction of a vector until the execution of the builder.
-newtype Builder element =
-  Builder (A.UpdateWithOffset element)
-
--- |
--- Provides support for /O(1)/ concatenation.
-instance Monoid (Builder element) where
-  {-# INLINE mempty #-}
-  mempty =
-    VectorBuilder.Private.Builder.empty
-  {-# INLINE mappend #-}
-  mappend =
-    prepend
-
--- |
--- Provides support for /O(1)/ concatenation.
-instance Semigroup (Builder element) where
-  {-# INLINE (<>) #-}
-  (<>) =
-    prepend
+data Builder element =
+  Builder !Int !(A.Update element)
 
 
 -- * Initialisation
@@ -38,14 +21,14 @@ instance Semigroup (Builder element) where
 {-# INLINE empty #-}
 empty :: Builder element
 empty =
-  Builder (mempty)
+  Builder 0 A.empty
 
 -- |
 -- Builder of a single element.
 {-# INLINE singleton #-}
 singleton :: element -> Builder element
 singleton element =
-  Builder (A.snoc element)
+  Builder 1 (A.write element)
 
 -- |
 -- Builder from an immutable vector of elements.
@@ -54,27 +37,49 @@ singleton element =
 {-# INLINE vector #-}
 vector :: B.Vector vector element => vector element -> Builder element
 vector vector =
-  Builder (A.append vector)
+  Builder (B.length vector) (A.writeMany vector)
 
 
--- * Updates
+-- -- * Updates
 
 {-# INLINE snoc #-}
 snoc :: element -> Builder element -> Builder element
-snoc element (Builder action) =
-  Builder (action <> A.snoc element)
+snoc element (Builder size update) =
+  Builder (succ size) (A.prepend size update (A.write element))
 
 {-# INLINE cons #-}
 cons :: element -> Builder element -> Builder element
-cons element (Builder action) =
-  Builder (A.snoc element <> action)
+cons element (Builder size update) =
+  Builder (succ size) (A.prepend 1 (A.write element) update)
 
 {-# INLINE prepend #-}
 prepend :: Builder element -> Builder element -> Builder element
-prepend (Builder action1) (Builder action2) =
-  Builder (action1 <> action2)
+prepend (Builder leftSize leftUpdate) (Builder rightSize rightUpdate) =
+  Builder (leftSize + rightSize) (A.prepend leftSize leftUpdate rightUpdate)
 
 {-# INLINE append #-}
 append :: Builder element -> Builder element -> Builder element
-append (Builder action1) (Builder action2) =
-  Builder (action2 <> action1)
+append =
+  flip prepend
+
+
+-- * Instances
+
+-- |
+-- Provides support for /O(1)/ concatenation.
+instance Semigroup (Builder element) where
+  {-# INLINE (<>) #-}
+  (<>) =
+    prepend
+
+-- |
+-- Provides support for /O(1)/ concatenation.
+instance Monoid (Builder element) where
+  {-# INLINE mempty #-}
+  mempty =
+    empty
+  {-# INLINE mappend #-}
+  mappend =
+    (<>)
+
+

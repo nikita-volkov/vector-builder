@@ -70,7 +70,6 @@ library
   other-modules:
     VectorBuilder.Private.Prelude
     VectorBuilder.Private.Update
-    VectorBuilder.Private.UpdateWithOffset
     VectorBuilder.Private.Builder
   exposed-modules:
     VectorBuilder.Builder

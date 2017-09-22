@@ -7,27 +7,24 @@ import qualified Data.Vector.Generic as B
 
 
 newtype Update element =
-  Update (forall s vector. A.MVector vector element => vector s element -> ST s ())
+  Update (forall s vector. A.MVector vector element => vector s element -> Int -> ST s ())
 
-instance Semigroup (Update element) where
-  {-# INLINE (<>) #-}
-  (<>) (Update leftIO) (Update rightIO) =
-    Update (\v -> leftIO v >> rightIO v)
+{-# INLINE write #-}
+write :: element -> Update element
+write element =
+  Update (\mVector offset -> A.unsafeWrite mVector offset element)
 
-instance Monoid (Update element) where
-  {-# INLINE mempty #-}
-  mempty =
-    Update (const (pure ()))
-  {-# INLINE mappend #-}
-  mappend =
-    (<>)
+{-# INLINE writeMany #-}
+writeMany :: B.Vector vector element => vector element -> Update element
+writeMany appendedVector =
+  Update (\mVector offset -> B.ifoldM' (\_ index element -> A.unsafeWrite mVector (strict (offset + index)) element) () appendedVector)
 
-{-# INLINE unsafeWrite #-}
-unsafeWrite :: Int -> element -> Update element
-unsafeWrite index element =
-  Update (\mVector -> A.unsafeWrite mVector index element)
+{-# INLINE prepend #-}
+prepend :: Int -> Update element -> Update element -> Update element
+prepend size (Update leftST) (Update rightST) =
+  Update (\mVector offset -> leftST mVector offset >> rightST mVector (strict (size + offset)))
 
-{-# INLINE unsafeWriteMany #-}
-unsafeWriteMany :: B.Vector vector element => Int -> vector element -> Update element
-unsafeWriteMany startingIndex appendedVector =
-  Update (\mVector -> B.ifoldM' (\_ index element -> A.unsafeWrite mVector (strict (startingIndex + index)) element) () appendedVector)
+{-# INLINE empty #-}
+empty :: Update element
+empty =
+  Update (\_ _ -> pure ())
