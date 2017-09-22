@@ -10,7 +10,7 @@ import qualified VectorBuilder.Vector as O
 
 
 main =
-  defaultMain [group 100, group 10000, group 1000000]
+  defaultMain [group 1000, group 10000, group 100000, group 1000000, group 10000000]
   where
     group size =
       bgroup (show size)
