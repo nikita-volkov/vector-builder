@@ -11,8 +11,10 @@ newtype SizeTrackingAction element result =
   deriving (Functor)
 
 instance Applicative (SizeTrackingAction element) where
+  {-# INLINE pure #-}
   pure result =
     SizeTrackingAction (\size -> (pure result, size))
+  {-# INLINE (<*>) #-}
   (<*>) (SizeTrackingAction sizeTrackingActionFn1) (SizeTrackingAction sizeTrackingActionFn2) =
     SizeTrackingAction sizeTrackingActionFn
     where
@@ -23,10 +25,12 @@ instance Applicative (SizeTrackingAction element) where
               (action2, size2) ->
                 (action1 <*> action2, size2)
 
+{-# INLINE snoc #-}
 snoc :: element -> SizeTrackingAction element ()
 snoc element =
   SizeTrackingAction (\size -> (C.unsafeWrite size element, succ size))
 
+{-# INLINE append #-}
 append :: B.Vector vector element => vector element -> SizeTrackingAction element ()
 append appendedVector =
   SizeTrackingAction (\size -> (C.unsafeWriteMany size appendedVector, size + B.length appendedVector))
