@@ -7,7 +7,7 @@ import qualified Data.Vector.Generic as B
 
 
 -- |
--- An abstrupdate over the size of a vector for the process of its construction.
+-- An abstraction over the size of a vector for the process of its construction.
 -- 
 -- It postpones the actual construction of a vector until the execution of the builder.
 data Builder element =
