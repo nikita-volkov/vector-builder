@@ -28,9 +28,9 @@ instance Applicative (SizeTrackingAction element) where
 {-# INLINE snoc #-}
 snoc :: element -> SizeTrackingAction element ()
 snoc element =
-  SizeTrackingAction (\size -> (C.unsafeWrite size element, succ size))
+  SizeTrackingAction (\size -> (C.unsafeWrite size element, strict (succ size)))
 
 {-# INLINE append #-}
 append :: B.Vector vector element => vector element -> SizeTrackingAction element ()
 append appendedVector =
-  SizeTrackingAction (\size -> (C.unsafeWriteMany size appendedVector, size + B.length appendedVector))
+  SizeTrackingAction (\size -> (C.unsafeWriteMany size appendedVector, strict (size + B.length appendedVector)))
