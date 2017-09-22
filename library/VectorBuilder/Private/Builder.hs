@@ -40,7 +40,7 @@ vector vector =
   Builder (B.length vector) (A.writeMany vector)
 
 
--- -- * Updates
+-- * Updates
 
 {-# INLINE snoc #-}
 snoc :: element -> Builder element -> Builder element
