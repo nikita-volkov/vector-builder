@@ -23,7 +23,7 @@ main =
         input =
           [0..size]
     sizes =
-      [1000, 100000, 10000000]
+      [1000, 10000, 100000, 1000000, 10000000]
     boxed =
       bgroup "boxed" (map (comparison builder growing) sizes)
       where
