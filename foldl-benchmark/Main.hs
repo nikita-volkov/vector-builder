@@ -13,37 +13,28 @@ import qualified VectorBuilder.Vector as O
 main =
   defaultMain [boxed, unboxed]
   where
+    comparison builder growing size =
+      bgroup (show size)
+      [
+        bench "builder" (nf builder input),
+        bench "growing" (nf growing input)
+      ]
+      where
+        input =
+          [0..size]
     sizes =
       [1000, 100000, 10000000]
     boxed =
-      bgroup "boxed" (map group sizes)
+      bgroup "boxed" (map (comparison builder growing) sizes)
       where
-        group size =
-          bgroup (show size)
-          [
-            bench "vector-builder" (nf foldWithBuilder input),
-            bench "default" (nf foldDefault input)
-          ]
-          where
-            input =
-              [0..size]
-            foldWithBuilder input =
-              A.fold (A.foldMap N.singleton O.build) input :: Vector Int
-            foldDefault input =
-              runST (A.foldM A.vector input) :: Vector Int
+        builder input =
+          A.fold (A.foldMap N.singleton O.build) input :: Vector Int
+        growing input =
+          runST (A.foldM A.vector input) :: Vector Int
     unboxed =
-      bgroup "unboxed" (map group sizes)
+      bgroup "unboxed" (map (comparison builder growing) sizes)
       where
-        group size =
-          bgroup (show size)
-          [
-            bench "vector-builder" (nf foldWithBuilder input),
-            bench "default" (nf foldDefault input)
-          ]
-          where
-            input =
-              [0..size]
-            foldWithBuilder input =
-              A.fold (A.foldMap N.singleton O.build) input :: G.Vector Int
-            foldDefault input =
-              runST (A.foldM A.vector input) :: G.Vector Int
+        builder input =
+          A.fold (A.foldMap N.singleton O.build) input :: G.Vector Int
+        growing input =
+          runST (A.foldM A.vector input) :: G.Vector Int
