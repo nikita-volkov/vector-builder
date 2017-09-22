@@ -20,9 +20,9 @@ instance Applicative (SizeTrackingAction element) where
     where
       sizeTrackingActionFn size =
         case sizeTrackingActionFn1 size of
-          (action1, size1) ->
+          (action1, !size1) ->
             case sizeTrackingActionFn2 size1 of
-              (action2, size2) ->
+              (action2, !size2) ->
                 (action1 <*> action2, size2)
 
 {-# INLINE snoc #-}
