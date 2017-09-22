@@ -1,7 +1,6 @@
 module Main where
 
 import Prelude
-import Bug
 import Criterion
 import Criterion.Main
 import qualified Control.Foldl as A
@@ -11,15 +10,18 @@ import qualified VectorBuilder.Vector as O
 
 
 main =
-  defaultMain
-  [
-    bench "vector-builder" (nf foldWithBuilder input),
-    bench "default" (nf foldDefault input)
-  ]
+  defaultMain [group 1000, group 10000, group 100000]
   where
-    input =
-      [0..1000]
-    foldWithBuilder input =
-      A.fold (A.foldMap N.singleton O.build) input :: Vector Int
-    foldDefault input =
-      runST (A.foldM A.vector input) :: Vector Int
+    group size =
+      bgroup (show size)
+      [
+        bench "vector-builder" (nf foldWithBuilder input),
+        bench "default" (nf foldDefault input)
+      ]
+      where
+        input =
+          [0..size]
+        foldWithBuilder input =
+          A.fold (A.foldMap N.singleton O.build) input :: Vector Int
+        foldDefault input =
+          runST (A.foldM A.vector input) :: Vector Int

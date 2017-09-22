@@ -130,7 +130,6 @@ benchmark foldl-benchmark
     -- benchmarking:
     criterion >= 1.1 && < 2,
     -- general:
-    bug == 1.*,
     rerebase < 2
 
 
