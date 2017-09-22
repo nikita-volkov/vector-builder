@@ -2,7 +2,7 @@ module VectorBuilder.Private.Builder
 where
 
 import VectorBuilder.Private.Prelude
-import qualified VectorBuilder.Private.SizeTrackingAction as A
+import qualified VectorBuilder.Private.UpdateWithOffset as A
 import qualified Data.Vector.Generic as B
 
 
@@ -11,7 +11,7 @@ import qualified Data.Vector.Generic as B
 -- 
 -- It postpones the actual construction of a vector until the execution of the builder.
 newtype Builder element =
-  Builder (A.SizeTrackingAction element ())
+  Builder (A.UpdateWithOffset element)
 
 -- |
 -- Provides support for /O(1)/ concatenation.
@@ -38,7 +38,7 @@ instance Semigroup (Builder element) where
 {-# INLINE empty #-}
 empty :: Builder element
 empty =
-  Builder (pure ())
+  Builder (mempty)
 
 -- |
 -- Builder of a single element.
@@ -62,19 +62,19 @@ vector vector =
 {-# INLINE snoc #-}
 snoc :: element -> Builder element -> Builder element
 snoc element (Builder action) =
-  Builder (action *> A.snoc element)
+  Builder (action <> A.snoc element)
 
 {-# INLINE cons #-}
 cons :: element -> Builder element -> Builder element
 cons element (Builder action) =
-  Builder (A.snoc element *> action)
+  Builder (A.snoc element <> action)
 
 {-# INLINE prepend #-}
 prepend :: Builder element -> Builder element -> Builder element
 prepend (Builder action1) (Builder action2) =
-  Builder (action1 *> action2)
+  Builder (action1 <> action2)
 
 {-# INLINE append #-}
 append :: Builder element -> Builder element -> Builder element
 append (Builder action1) (Builder action2) =
-  Builder (action1 <* action2)
+  Builder (action2 <> action1)

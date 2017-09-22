@@ -69,8 +69,8 @@ library
     Haskell2010
   other-modules:
     VectorBuilder.Private.Prelude
-    VectorBuilder.Private.Action
-    VectorBuilder.Private.SizeTrackingAction
+    VectorBuilder.Private.Update
+    VectorBuilder.Private.UpdateWithOffset
     VectorBuilder.Private.Builder
   exposed-modules:
     VectorBuilder.Builder

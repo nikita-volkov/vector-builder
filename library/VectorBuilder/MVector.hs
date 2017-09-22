@@ -6,8 +6,8 @@ where
 import VectorBuilder.Private.Prelude
 import Data.Vector.Generic.Mutable
 import qualified VectorBuilder.Private.Builder as A
-import qualified VectorBuilder.Private.SizeTrackingAction as B
-import qualified VectorBuilder.Private.Action as C
+import qualified VectorBuilder.Private.UpdateWithOffset as B
+import qualified VectorBuilder.Private.Update as C
 
 
 -- |
@@ -16,10 +16,10 @@ import qualified VectorBuilder.Private.Action as C
 -- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINABLE build #-}
 build :: MVector vector element => A.Builder element -> ST s (vector s element)
-build (A.Builder (B.SizeTrackingAction sizeTrackingActionFn)) =
-  case sizeTrackingActionFn 0 of
-    (C.Action actionFn, size) ->
+build (A.Builder (B.UpdateWithOffset offsetTrackingUpdateFn)) =
+  case offsetTrackingUpdateFn 0 of
+    (C.Update actionFn, offset) ->
       do
-        vector <- unsafeNew size
+        vector <- unsafeNew offset
         actionFn vector
         return vector
