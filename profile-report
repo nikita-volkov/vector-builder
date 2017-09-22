@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eo pipefail
+
+cabal build foldl-profiling
+cd dist
+build/foldl-profiling/foldl-profiling +RTS -N -p -s -i0.001 -RTS
+open foldl-profiling.prof
