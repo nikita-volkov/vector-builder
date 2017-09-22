@@ -13,28 +13,31 @@ import qualified VectorBuilder.Vector as O
 main =
   defaultMain [boxed, unboxed]
   where
-    comparison builder growing size =
-      bgroup (show size)
-      [
-        bench "builder" (nf builder input),
-        bench "growing" (nf growing input)
-      ]
+    comparisons name builderSubject growingSubject =
+      bgroup name (map comparison sizes)
       where
-        input =
-          [0..size]
-    sizes =
-      [1000, 10000, 100000, 1000000, 10000000]
+        sizes =
+          [1000, 10000, 100000, 1000000, 10000000]
+        comparison size =
+          bgroup (show size)
+          [
+            bench "builder" (nf builderSubject input),
+            bench "growing" (nf growingSubject input)
+          ]
+          where
+            input =
+              [0..size]
     boxed =
-      bgroup "boxed" (map (comparison builder growing) sizes)
+      comparisons "boxed" builderSubject growingSubject
       where
-        builder input =
+        builderSubject input =
           A.fold (A.foldMap N.singleton O.build) input :: Vector Int
-        growing input =
+        growingSubject input =
           runST (A.foldM A.vector input) :: Vector Int
     unboxed =
-      bgroup "unboxed" (map (comparison builder growing) sizes)
+      comparisons "unboxed" builderSubject growingSubject
       where
-        builder input =
+        builderSubject input =
           A.fold (A.foldMap N.singleton O.build) input :: G.Vector Int
-        growing input =
+        growingSubject input =
           runST (A.foldM A.vector input) :: G.Vector Int
