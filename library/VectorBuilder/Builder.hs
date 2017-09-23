@@ -7,4 +7,4 @@ module VectorBuilder.Builder
 )
 where
 
-import VectorBuilder.Private.Builder
+import VectorBuilder.Core.Builder

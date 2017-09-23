@@ -1,8 +1,8 @@
-module VectorBuilder.Private.Builder
+module VectorBuilder.Core.Builder
 where
 
-import VectorBuilder.Private.Prelude hiding (empty)
-import qualified VectorBuilder.Private.Update as A
+import VectorBuilder.Prelude hiding (empty)
+import qualified VectorBuilder.Core.Update as A
 import qualified Data.Vector.Generic as B
 
 

@@ -3,10 +3,10 @@
 module VectorBuilder.MVector
 where
 
-import VectorBuilder.Private.Prelude
+import VectorBuilder.Prelude
 import Data.Vector.Generic.Mutable
-import qualified VectorBuilder.Private.Builder as A
-import qualified VectorBuilder.Private.Update as C
+import qualified VectorBuilder.Core.Builder as A
+import qualified VectorBuilder.Core.Update as C
 
 
 -- |

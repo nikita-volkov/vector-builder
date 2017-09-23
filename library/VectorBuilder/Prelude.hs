@@ -1,4 +1,4 @@
-module VectorBuilder.Private.Prelude
+module VectorBuilder.Prelude
 (
   module Exports,
   strict,

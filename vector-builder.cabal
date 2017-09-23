@@ -68,9 +68,9 @@ library
   default-language:
     Haskell2010
   other-modules:
-    VectorBuilder.Private.Prelude
-    VectorBuilder.Private.Update
-    VectorBuilder.Private.Builder
+    VectorBuilder.Prelude
+    VectorBuilder.Core.Update
+    VectorBuilder.Core.Builder
   exposed-modules:
     VectorBuilder.Builder
     VectorBuilder.MVector

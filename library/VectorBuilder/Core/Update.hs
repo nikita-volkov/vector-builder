@@ -1,7 +1,7 @@
-module VectorBuilder.Private.Update
+module VectorBuilder.Core.Update
 where
 
-import VectorBuilder.Private.Prelude
+import VectorBuilder.Prelude
 import qualified Data.Vector.Generic.Mutable as A
 import qualified Data.Vector.Generic as B
 
