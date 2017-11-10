@@ -69,6 +69,7 @@ library
     VectorBuilder.Builder
     VectorBuilder.MVector
     VectorBuilder.Vector
+    VectorBuilder.MonadPlus
   other-modules:
     VectorBuilder.Prelude
     VectorBuilder.Core.Update
