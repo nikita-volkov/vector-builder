@@ -6,7 +6,7 @@ synopsis:
   Vector builder
 description:
   An API for efficient and convenient construction of vectors.
-  It provides the composable `Builder` abstraction, which has instances of the `Monoid` and `Semigroup` classes. 
+  It provides the composable `Builder` abstraction, which has instances of the `Monoid` and `Semigroup` classes.
   .
   [Usage]
   .
@@ -36,7 +36,7 @@ category:
 homepage:
   https://github.com/nikita-volkov/vector-builder
 bug-reports:
-  https://github.com/nikita-volkov/vector-builder/issues 
+  https://github.com/nikita-volkov/vector-builder/issues
 author:
   Nikita Volkov <nikita.y.volkov@mail.ru>
 maintainer:
@@ -52,13 +52,11 @@ build-type:
 cabal-version:
   >=1.10
 
-
 source-repository head
   type:
     git
   location:
     git://github.com/nikita-volkov/vector-builder.git
-
 
 library
   hs-source-dirs:
@@ -67,20 +65,19 @@ library
     Arrows, BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeFamilies, TypeOperators, UnboxedTuples
   default-language:
     Haskell2010
-  other-modules:
-    VectorBuilder.Prelude
-    VectorBuilder.Core.Update
-    VectorBuilder.Core.Builder
   exposed-modules:
     VectorBuilder.Builder
     VectorBuilder.MVector
     VectorBuilder.Vector
+  other-modules:
+    VectorBuilder.Prelude
+    VectorBuilder.Core.Update
+    VectorBuilder.Core.Builder
   build-depends:
     vector >= 0.11 && < 0.13,
     semigroups >= 0.16 && < 0.20,
     base-prelude < 2,
     base >= 4.6 && < 5
-
 
 test-suite tests
   type:
@@ -106,9 +103,8 @@ test-suite tests
     -- 
     rebase
 
-
 benchmark foldl-benchmark
-  type: 
+  type:
     exitcode-stdio-1.0
   hs-source-dirs:
     foldl-benchmark
@@ -131,9 +127,8 @@ benchmark foldl-benchmark
     -- general:
     rerebase < 2
 
-
 test-suite foldl-profiling
-  type: 
+  type:
     exitcode-stdio-1.0
   hs-source-dirs:
     foldl-profiling
