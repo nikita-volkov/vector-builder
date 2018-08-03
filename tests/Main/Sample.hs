@@ -1,9 +1,9 @@
 module Main.Sample where
 
-import Rebase.Prelude
+import Prelude
 import Test.QuickCheck.Instances
 import qualified VectorBuilder.Builder as A
-import qualified Rebase.Data.Vector as B
+import qualified Data.Vector as B
 import qualified Test.Tasty.QuickCheck as C
 
 
