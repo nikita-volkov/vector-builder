@@ -1,9 +1,10 @@
 module VectorBuilder.Core.Builder
 where
 
-import VectorBuilder.Prelude hiding (empty)
+import VectorBuilder.Prelude hiding (empty, concat)
 import qualified VectorBuilder.Core.Update as A
 import qualified Data.Vector.Generic as B
+import qualified Data.Vector.Generic.Mutable as C
 
 
 -- |
@@ -67,6 +68,17 @@ append :: Builder element -> Builder element -> Builder element
 append =
   flip prepend
 
+{-# INLINE concat #-}
+concat :: Foldable foldable => foldable (Builder element) -> Builder element
+concat builders =
+  Builder
+    (let
+      step size (Builder builderSize _) = size + builderSize
+      in foldl' step 0 builders)
+    (A.Update (\mVector offset -> foldM_ (\index (Builder size (A.Update st)) ->
+      st mVector index $> index + size)
+      offset
+      builders))
 
 -- * Instances
 
@@ -76,6 +88,8 @@ instance Semigroup (Builder element) where
   {-# INLINE (<>) #-}
   (<>) =
     prepend
+  sconcat =
+    concat
 
 -- |
 -- Provides support for /O(1)/ concatenation.
@@ -86,5 +100,7 @@ instance Monoid (Builder element) where
   {-# INLINE mappend #-}
   mappend =
     (<>)
-
+  {-# INLINE mconcat #-}
+  mconcat =
+    concat
 
