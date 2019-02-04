@@ -28,3 +28,8 @@ prepend size (Update leftST) (Update rightST) =
 empty :: Update element
 empty =
   Update (\_ _ -> pure ())
+
+{-# INLINE writeFoldable #-}
+writeFoldable :: Foldable foldable => foldable element -> Update element
+writeFoldable foldable =
+  Update (\mVector offset -> foldM_ (\ index element -> A.unsafeWrite mVector index element $> succ index) offset foldable)

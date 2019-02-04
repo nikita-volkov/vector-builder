@@ -29,7 +29,7 @@ description:
   >  where
   >    builder =
   >      B.vector vector <>
-  >      foldMap B.singleton list <>
+  >      B.foldable list <>
   >      B.singleton element
 category:
   Vector

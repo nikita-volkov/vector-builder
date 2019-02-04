@@ -39,6 +39,11 @@ vector :: B.Vector vector element => vector element -> Builder element
 vector vector =
   Builder (B.length vector) (A.writeMany vector)
 
+{-# INLINE foldable #-}
+foldable :: Foldable foldable => foldable element -> Builder element
+foldable foldable =
+  Builder (length foldable) (A.writeFoldable foldable)
+
 
 -- * Updates
 

@@ -4,6 +4,7 @@ module VectorBuilder.Builder
   empty,
   singleton,
   vector,
+  foldable,
 )
 where
 
