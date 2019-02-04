@@ -9,10 +9,11 @@ import VectorBuilder.Prelude
 import Data.Vector (Vector)
 import qualified VectorBuilder.Builder as A
 import qualified VectorBuilder.Vector as B
+import qualified Data.Vector.Generic as C
 
 
 {-# INLINABLE many #-}
-many :: MonadPlus m => m a -> m (Vector a)
+many :: (MonadPlus m, C.Vector vector element) => m element -> m (vector element)
 many m =
   liftM B.build loop
   where
@@ -25,12 +26,12 @@ many m =
         (return mempty)
 
 {-# INLINABLE sepBy #-}
-sepBy :: MonadPlus m => m element -> m separator -> m (Vector element)
+sepBy :: (MonadPlus m, C.Vector vector element) => m element -> m separator -> m (vector element)
 sepBy elementM separatorM =
-  mplus (sepBy1 elementM separatorM) (return mempty)
+  mplus (sepBy1 elementM separatorM) (return C.empty)
 
 {-# INLINABLE sepBy1 #-}
-sepBy1 :: MonadPlus m => m element -> m separator -> m (Vector element)
+sepBy1 :: (MonadPlus m, C.Vector vector element) => m element -> m separator -> m (vector element)
 sepBy1 elementM separatorM =
   liftM B.build loop
   where
