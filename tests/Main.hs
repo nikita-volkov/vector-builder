@@ -27,6 +27,6 @@ main =
     ,
     testCase "Alternative.some on empty" $ assertEqual ""
       (Left "not enough input")
-      (D.parseOnly (F.some D.anyChar) "")
+      (D.parseOnly (F.some D.anyChar :: D.Parser (Vector Char)) "")
   ]
 
