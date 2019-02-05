@@ -17,7 +17,7 @@ main =
   defaultMain $
   testGroup "All tests"
   [
-    testProperty "" $ \(samples :: [C.Sample Int]) ->
+    testProperty "samples" $ \(samples :: [C.Sample Int]) ->
       foldMap C.toVector samples ===
       B.build (foldMap C.toBuilder samples)
     ,
@@ -28,5 +28,13 @@ main =
     testCase "Alternative.some on empty" $ assertEqual ""
       (Left "not enough input")
       (D.parseOnly (F.some D.anyChar :: D.Parser (Vector Char)) "")
+    ,
+    testProperty "mconcat" $ \(samples :: [C.Sample Int]) ->
+      foldMap C.toVector samples ===
+      B.build (mconcat (map C.toBuilder samples))
+    ,
+    testProperty "foldable" $ \(elements :: [Int]) ->
+      E.fromList elements ===
+      B.build (A.foldable elements)
   ]
 
