@@ -15,15 +15,27 @@ import qualified Data.Vector.Generic as C
 {-# INLINABLE many #-}
 many :: (MonadPlus m, C.Vector vector element) => m element -> m (vector element)
 many m =
-  liftM B.build loop
+  liftM B.build (manyBuilder m)
+
+{-# INLINABLE manyBuilder #-}
+manyBuilder :: (MonadPlus m) => m element -> m (A.Builder element)
+manyBuilder m =
+  loop mempty
   where
-    loop =
+    loop !builder =
       mplus
         (do
           !element <- m
-          remainders <- loop
-          return (A.singleton element <> remainders))
-        (return mempty)
+          loop (builder <> A.singleton element))
+        (return builder)
+
+{-# INLINABLE many1 #-}
+many1 :: (MonadPlus m, C.Vector vector element) => m element -> m (vector element)
+many1 m =
+  do
+    firstElement <- m
+    builder <- manyBuilder m
+    return (B.build (A.singleton firstElement <> builder))
 
 {-# INLINABLE sepBy #-}
 sepBy :: (MonadPlus m, C.Vector vector element) => m element -> m separator -> m (vector element)
@@ -33,10 +45,15 @@ sepBy elementM separatorM =
 {-# INLINABLE sepBy1 #-}
 sepBy1 :: (MonadPlus m, C.Vector vector element) => m element -> m separator -> m (vector element)
 sepBy1 elementM separatorM =
-  liftM B.build loop
+  do
+    firstElement <- elementM
+    builder <- loop (A.singleton firstElement)
+    return (B.build builder)
   where
-    loop =
-      do
-        !element <- elementM
-        remainders <- mplus (separatorM >> loop) (return mempty)
-        return (A.singleton element <> remainders)
+    loop builder =
+      mplus
+        (do
+          separatorM
+          !element <- elementM
+          loop (builder <> A.singleton element))
+        (return builder)
