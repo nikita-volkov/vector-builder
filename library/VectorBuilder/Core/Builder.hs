@@ -15,6 +15,13 @@ data Builder element =
   Builder !Int !(A.Update element)
 
 
+-- |
+-- Gets the size of a Builder.
+{-# INLINE size #-}
+size :: Builder element -> Int
+size (Builder s _) = s
+
+
 -- * Initialisation
 
 -- |
