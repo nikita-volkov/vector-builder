@@ -3,6 +3,7 @@ module VectorBuilder.Builder
   Builder,
   empty,
   singleton,
+  size,
   vector,
   foldable,
 )
