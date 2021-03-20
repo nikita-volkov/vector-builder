@@ -76,12 +76,8 @@ library
     VectorBuilder.Core.Update
     VectorBuilder.Core.Builder
   build-depends:
-    vector >=0.11 && <0.13,
-    base-prelude <2,
-    base >=4.8 && <5
-  if impl(ghc < 8.0)
-    build-depends:
-      semigroups >=0.16 && <0.20
+    vector >=0.12 && <0.13,
+    base >=4.10 && <5
 
 test-suite tests
   type:
