@@ -1,13 +1,11 @@
-module VectorBuilder.Core.Update
-where
+module VectorBuilder.Core.Update where
 
-import VectorBuilder.Prelude
-import qualified Data.Vector.Generic.Mutable as A
 import qualified Data.Vector.Generic as B
+import qualified Data.Vector.Generic.Mutable as A
+import VectorBuilder.Prelude
 
-
-newtype Update element =
-  Update (forall s vector. A.MVector vector element => vector s element -> Int -> ST s ())
+newtype Update element
+  = Update (forall s vector. A.MVector vector element => vector s element -> Int -> ST s ())
 
 {-# INLINE write #-}
 write :: element -> Update element
@@ -32,4 +30,4 @@ empty =
 {-# INLINE writeFoldable #-}
 writeFoldable :: Foldable foldable => foldable element -> Update element
 writeFoldable foldable =
-  Update (\mVector offset -> foldM_ (\ index element -> A.unsafeWrite mVector index element $> succ index) offset foldable)
+  Update (\mVector offset -> foldM_ (\index element -> A.unsafeWrite mVector index element $> succ index) offset foldable)

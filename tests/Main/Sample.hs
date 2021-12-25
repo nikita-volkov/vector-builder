@@ -1,17 +1,16 @@
 module Main.Sample where
 
-import Prelude
-import Test.QuickCheck.Instances
-import qualified VectorBuilder.Builder as A
 import qualified Data.Vector as B
+import Test.QuickCheck.Instances
 import qualified Test.Tasty.QuickCheck as C
+import qualified VectorBuilder.Builder as A
+import Prelude
 
-
-data Sample a =
-  Empty |
-  Singleton a |
-  Vector (Vector a) |
-  List [a]
+data Sample a
+  = Empty
+  | Singleton a
+  | Vector (Vector a)
+  | List [a]
   deriving (Show)
 
 toBuilder :: Sample a -> A.Builder a

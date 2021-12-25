@@ -1,26 +1,22 @@
-module VectorBuilder.Core.Builder
-where
+module VectorBuilder.Core.Builder where
 
-import VectorBuilder.Prelude hiding (empty, concat)
-import qualified VectorBuilder.Core.Update as A
 import qualified Data.Vector.Generic as B
 import qualified Data.Vector.Generic.Mutable as C
-
+import qualified VectorBuilder.Core.Update as A
+import VectorBuilder.Prelude hiding (concat, empty)
 
 -- |
 -- An abstraction over the size of a vector for the process of its construction.
--- 
+--
 -- It postpones the actual construction of a vector until the execution of the builder.
-data Builder element =
-  Builder !Int !(A.Update element)
-
+data Builder element
+  = Builder !Int !(A.Update element)
 
 -- |
 -- Gets the size of a Builder.
 {-# INLINE size #-}
 size :: Builder element -> Int
 size (Builder s _) = s
-
 
 -- * Initialisation
 
@@ -40,7 +36,7 @@ singleton element =
 
 -- |
 -- Builder from an immutable vector of elements.
--- 
+--
 -- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINE vector #-}
 vector :: B.Vector vector element => vector element -> Builder element
@@ -51,7 +47,6 @@ vector vector =
 foldable :: Foldable foldable => foldable element -> Builder element
 foldable foldable =
   Builder (length foldable) (A.writeFoldable foldable)
-
 
 -- * Updates
 
@@ -79,13 +74,19 @@ append =
 concat :: Foldable foldable => foldable (Builder element) -> Builder element
 concat builders =
   Builder
-    (let
-      step size (Builder builderSize _) = size + builderSize
-      in foldl' step 0 builders)
-    (A.Update (\mVector offset -> foldM_ (\index (Builder size (A.Update st)) ->
-      st mVector index $> index + size)
-      offset
-      builders))
+    ( let step size (Builder builderSize _) = size + builderSize
+       in foldl' step 0 builders
+    )
+    ( A.Update
+        ( \mVector offset ->
+            foldM_
+              ( \index (Builder size (A.Update st)) ->
+                  st mVector index $> index + size
+              )
+              offset
+              builders
+        )
+    )
 
 -- * Instances
 
@@ -110,4 +111,3 @@ instance Monoid (Builder element) where
   {-# INLINE mconcat #-}
   mconcat =
     concat
-
