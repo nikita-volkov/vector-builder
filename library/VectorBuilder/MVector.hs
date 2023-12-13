@@ -12,7 +12,7 @@ import VectorBuilder.Prelude
 --
 -- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINEABLE build #-}
-build :: MVector vector element => A.Builder element -> ST s (vector s element)
+build :: (MVector vector element) => A.Builder element -> ST s (vector s element)
 build (A.Builder size (C.Update update)) =
   do
     vector <- unsafeNew size

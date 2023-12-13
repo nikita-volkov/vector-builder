@@ -12,6 +12,6 @@ import VectorBuilder.Prelude
 --
 -- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINE build #-}
-build :: Vector vector element => A.Builder element -> vector element
+build :: (Vector vector element) => A.Builder element -> vector element
 build builder =
   runST (B.build builder >>= unsafeFreeze)
