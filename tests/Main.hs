@@ -7,27 +7,27 @@ import qualified Main.Sample as C
 import Test.Tasty
 import Test.Tasty.HUnit
 import Test.Tasty.QuickCheck
-import Test.Tasty.Runners
 import qualified VectorBuilder.Alternative as F
 import qualified VectorBuilder.Builder as A
 import qualified VectorBuilder.MonadPlus as H
 import qualified VectorBuilder.Vector as B
 import Prelude
 
+main :: IO ()
 main =
-  defaultMain $
-    testGroup
+  defaultMain
+    $ testGroup
       "All tests"
       [ testProperty "samples" $ \(samples :: [C.Sample Int]) ->
           foldMap C.toVector samples
             === B.build (foldMap C.toBuilder samples),
-        testCase "Alternative.some" $
-          assertEqual
+        testCase "Alternative.some"
+          $ assertEqual
             ""
             (Right (E.fromList "1234"))
             (D.parseOnly (F.some D.anyChar) "1234"),
-        testCase "Alternative.some on empty" $
-          assertEqual
+        testCase "Alternative.some on empty"
+          $ assertEqual
             ""
             (Left "not enough input")
             (D.parseOnly (F.some D.anyChar :: D.Parser (Vector Char)) ""),
