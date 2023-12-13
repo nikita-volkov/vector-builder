@@ -3,7 +3,6 @@
 -- For instance, they can be applied with parsing libraries.
 module VectorBuilder.MonadPlus where
 
-import Data.Vector (Vector)
 import qualified Data.Vector.Generic as C
 import qualified VectorBuilder.Builder as A
 import VectorBuilder.Prelude

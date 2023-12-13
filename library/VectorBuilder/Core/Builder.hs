@@ -1,7 +1,6 @@
 module VectorBuilder.Core.Builder where
 
 import qualified Data.Vector.Generic as B
-import qualified Data.Vector.Generic.Mutable as C
 import qualified VectorBuilder.Core.Update as A
 import VectorBuilder.Prelude hiding (concat, empty)
 
@@ -39,12 +38,12 @@ singleton element =
 --
 -- Supports all kinds of vectors: boxed, unboxed, primitive, storable.
 {-# INLINE vector #-}
-vector :: B.Vector vector element => vector element -> Builder element
+vector :: (B.Vector vector element) => vector element -> Builder element
 vector vector =
   Builder (B.length vector) (A.writeMany vector)
 
 {-# INLINE foldable #-}
-foldable :: Foldable foldable => foldable element -> Builder element
+foldable :: (Foldable foldable) => foldable element -> Builder element
 foldable foldable =
   Builder (length foldable) (A.writeFoldable foldable)
 
@@ -71,7 +70,7 @@ append =
   flip prepend
 
 {-# INLINE concat #-}
-concat :: Foldable foldable => foldable (Builder element) -> Builder element
+concat :: (Foldable foldable) => foldable (Builder element) -> Builder element
 concat builders =
   Builder
     ( let step size (Builder builderSize _) = size + builderSize

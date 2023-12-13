@@ -5,7 +5,7 @@ import qualified Data.Vector.Generic.Mutable as A
 import VectorBuilder.Prelude
 
 newtype Update element
-  = Update (forall s vector. A.MVector vector element => vector s element -> Int -> ST s ())
+  = Update (forall s vector. (A.MVector vector element) => vector s element -> Int -> ST s ())
 
 {-# INLINE write #-}
 write :: element -> Update element
@@ -13,7 +13,7 @@ write element =
   Update (\mVector offset -> A.unsafeWrite mVector offset element)
 
 {-# INLINE writeMany #-}
-writeMany :: B.Vector vector element => vector element -> Update element
+writeMany :: (B.Vector vector element) => vector element -> Update element
 writeMany appendedVector =
   Update (\mVector offset -> B.ifoldM' (\_ index element -> A.unsafeWrite mVector (strict (offset + index)) element) () appendedVector)
 
@@ -28,6 +28,6 @@ empty =
   Update (\_ _ -> pure ())
 
 {-# INLINE writeFoldable #-}
-writeFoldable :: Foldable foldable => foldable element -> Update element
+writeFoldable :: (Foldable foldable) => foldable element -> Update element
 writeFoldable foldable =
   Update (\mVector offset -> foldM_ (\index element -> A.unsafeWrite mVector index element $> succ index) offset foldable)
