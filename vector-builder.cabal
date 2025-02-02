@@ -1,5 +1,5 @@
 name:          vector-builder
-version:       0.3.8.5
+version:       0.3.8.6
 synopsis:      Vector builder
 description:
   An API for efficient and convenient construction of vectors.
