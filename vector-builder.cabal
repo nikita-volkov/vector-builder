@@ -1,6 +1,6 @@
 cabal-version: 3.0
 name:          vector-builder
-version:       0.3.8.6
+version:       0.3.8.7
 synopsis:      Vector builder
 description:
   An API for efficient and convenient construction of vectors.
